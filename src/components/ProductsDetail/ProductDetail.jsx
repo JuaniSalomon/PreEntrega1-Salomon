@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Products from "../Products/Products";
+import "./ProductDetail.css";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -34,9 +35,11 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="container mt-4">
+      <div className="container d-flex flex-column align-items-start mx-2">
         <h2>{product.name}</h2>
-        <img src={product.image} alt={product.name} className="img-fluid" />
+
+        <img src={product.image} alt={product.name} className="imgDetail" />
+
         <p>{product.description}</p>
         <p>${product.price}</p>
         <p>Stock: {product.stock}</p>
@@ -51,7 +54,10 @@ const ProductDetail = () => {
           +
         </button>
       </div>
-      <button onClick={handleAddToCart} className="btn btn-warning mt-3 ms-4">
+      <button
+        onClick={handleAddToCart}
+        className="btn btn-warning mt-3 ms-4 mb-3"
+      >
         Agregar al carrito
       </button>
       <Link to="/" className="btn btn-link mt-3">
