@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import CartWidget from "../CartWidget/CartWidget";
+import CartWidget from "../Cart/CartWidget/CartWidget";
+import Cart from "../Cart/Cart";
 
 const NavBar = () => {
   return (
@@ -31,6 +32,30 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
+
+      {/* OFFCANVAS INIT */}
+      <div
+        className="offcanvas offcanvas-end"
+        tabIndex="-1"
+        id="cartOffcanvas"
+        aria-labelledby="cartOffcanvasLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="cartOffcanvasLabel">
+            Carrito
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="offcanvas-body">
+          <Cart />
+        </div>
+      </div>
+      {/* OFFCANVAS END */}
     </>
   );
 };
