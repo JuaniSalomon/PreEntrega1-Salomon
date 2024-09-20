@@ -1,31 +1,67 @@
 import { Link } from "react-router-dom";
 import CartWidget from "../Cart/CartWidget/CartWidget";
 import Cart from "../Cart/Cart";
+import "./Navbar.css";
 
 const NavBar = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-warning sticky-top">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand custom-brand" to="/">
             J Beers
           </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item me-5">
-                <Link className="nav-link active" to="/schneider">
-                  Schneider
+                <Link className="nav-link active" to="/">
+                  Inicio
                 </Link>
               </li>
-              <li className="nav-item me-5">
-                <Link className="nav-link active" to="/stella">
-                  Stella Artois
-                </Link>
-              </li>
-              <li className="nav-item me-5">
-                <Link className="nav-link active" to="/quilmes">
-                  Quilmes
-                </Link>
+
+              {/* Dropdown de Productos */}
+              <li className="nav-item dropdown me-5">
+                <a
+                  className="nav-link dropdown-toggle active"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Productos
+                </a>
+                <ul
+                  className="dropdown-menu bg-warning"
+                  aria-labelledby="navbarDropdown"
+                >
+                  <li>
+                    <Link className="dropdown-item" to="/schneider">
+                      Schneider
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/stella">
+                      Stella Artois
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/quilmes">
+                      Quilmes
+                    </Link>
+                  </li>
+                </ul>
               </li>
             </ul>
             <CartWidget />

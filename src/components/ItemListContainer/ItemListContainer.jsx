@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ItemList from "../ItemList/ItemList";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, updateDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../main";
 
 const ItemListContainer = ({ brand }) => {
@@ -9,6 +9,8 @@ const ItemListContainer = ({ brand }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const isManualReload =
+      performance.getEntriesByType("navigation")[0].type === "reload";
     const fetchProducts = async () => {
       try {
         setLoading(true);
@@ -18,6 +20,17 @@ const ItemListContainer = ({ brand }) => {
           id: doc.id,
           ...doc.data(),
         }));
+
+        if (isManualReload) {
+          await Promise.all(
+            productList.map(async (product) => {
+              const productRef = doc(db, "products", product.id);
+              await updateDoc(productRef, {
+                stock: product.originalStock,
+              });
+            })
+          );
+        }
 
         setProducts(productList);
       } catch (err) {

@@ -1,9 +1,11 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../Cart/CartContext";
+import { db } from "../../main";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import "./CheckoutForm.css";
 
-const CheckoutForm = (onConfirm) => {
+const CheckoutForm = () => {
   const [buyerData, setBuyerData] = useState({
     name: "",
     lastName: "",
@@ -14,22 +16,48 @@ const CheckoutForm = (onConfirm) => {
     address: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { clearCart } = useContext(CartContext);
+  const { cartItems, clearCart } = useContext(CartContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBuyerData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      "Gracias por tu compra! Los productos serán enviados a la dirección ingresada."
-    );
-    clearCart();
-    navigate("/");
-    onConfirm();
+    setLoading(true);
+    setError(null);
+
+    try {
+      await Promise.all(
+        cartItems.map(async (item) => {
+          const productRef = doc(db, "products", item.id);
+          const productsSnapshot = await getDoc(productRef);
+          const productData = productsSnapshot.data();
+
+          if (productData.stock >= item.quantity) {
+            await updateDoc(productRef, {
+              stock: productData.stock - item.quantity,
+            });
+          } else {
+            throw new Error(`No hay suficiente stock de ${item.name}.`);
+          }
+        })
+      );
+
+      clearCart();
+      alert(
+        "Gracias por tu compra! Los productos serán enviados a la dirección ingresada."
+      );
+      navigate("/");
+    } catch (error) {
+      alert(`Error al procesar la compra: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fields = [
@@ -76,8 +104,8 @@ const CheckoutForm = (onConfirm) => {
           />
         </div>
       ))}
-      <button type="submit" className="btn btn-warning">
-        Confirmar Compra
+      <button type="submit" className="btn btn-warning" disabled={loading}>
+        {loading ? "Cargando..." : "Confirmar Compra"}
       </button>
     </form>
   );
