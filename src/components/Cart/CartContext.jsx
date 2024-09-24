@@ -4,6 +4,7 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
 
   // AGREGAR AL CARRITO
   const addToCart = (product, quantity) => {
@@ -35,11 +36,22 @@ export const CartProvider = ({ children }) => {
   );
 
   // LIMPIAR CARRITO
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    setCartItems([]);
+    setIsCheckoutVisible(false);
+  };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart, totalPrice }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        totalPrice,
+        isCheckoutVisible,
+        setIsCheckoutVisible,
+      }}
     >
       {children}
     </CartContext.Provider>

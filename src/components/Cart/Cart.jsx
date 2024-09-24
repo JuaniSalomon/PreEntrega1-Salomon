@@ -4,8 +4,13 @@ import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import "./Cart.css";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
-  const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
+  const {
+    cartItems,
+    removeFromCart,
+    clearCart,
+    isCheckoutVisible,
+    setIsCheckoutVisible,
+  } = useContext(CartContext);
 
   const handleFinishPurchase = () => {
     setShowCheckoutForm(true);
